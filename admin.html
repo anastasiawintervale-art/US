@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin — US Leads Dashboard</title>
+    <title>后台管理 — US 客户信息</title>
     <style>
         :root {
             --navy: #0F2044;
@@ -19,13 +19,13 @@
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
             background: var(--bg);
             color: var(--text);
             min-height: 100vh;
         }
 
-        /* ---- LOGIN SCREEN ---- */
+        /* ---- 登录页 ---- */
         #loginScreen {
             display: flex;
             align-items: center;
@@ -44,7 +44,6 @@
         .login-box h1 {
             font-size: 18px;
             font-weight: 800;
-            text-transform: uppercase;
             color: var(--navy);
             letter-spacing: 1px;
             margin-bottom: 6px;
@@ -73,7 +72,6 @@
             border: none;
             font-size: 14px;
             font-weight: 700;
-            text-transform: uppercase;
             cursor: pointer;
             letter-spacing: 0.5px;
         }
@@ -85,7 +83,7 @@
             display: none;
         }
 
-        /* ---- DASHBOARD ---- */
+        /* ---- 主面板 ---- */
         #dashboard { display: none; }
 
         .top-bar {
@@ -100,7 +98,6 @@
         .top-bar h1 {
             font-size: 16px;
             font-weight: 800;
-            text-transform: uppercase;
             letter-spacing: 1px;
         }
         .top-bar-right {
@@ -115,8 +112,6 @@
             font-weight: 700;
             padding: 4px 10px;
             border-radius: 20px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
             display: flex;
             align-items: center;
             gap: 5px;
@@ -145,7 +140,7 @@
 
         .dashboard-body { padding: 24px; }
 
-        /* Stats Cards */
+        /* 统计卡片 */
         .stats-row {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -167,13 +162,11 @@
         .stat-card .s-label {
             font-size: 11px;
             color: var(--muted);
-            text-transform: uppercase;
             font-weight: 600;
             margin-top: 4px;
-            letter-spacing: 0.3px;
         }
 
-        /* Controls */
+        /* 控制栏 */
         .controls-bar {
             display: flex;
             align-items: center;
@@ -206,9 +199,9 @@
             font-size: 13px;
             font-weight: 700;
             cursor: pointer;
-            text-transform: uppercase;
         }
         .refresh-btn:hover { background: #1a3a6e; }
+        .refresh-btn:active { transform: scale(0.97); }
         .export-btn {
             padding: 9px 18px;
             background: var(--green);
@@ -217,11 +210,10 @@
             font-size: 13px;
             font-weight: 700;
             cursor: pointer;
-            text-transform: uppercase;
         }
         .export-btn:hover { background: #166534; }
 
-        /* Table */
+        /* 表格 */
         .table-wrapper {
             background: var(--white);
             border: 1px solid var(--border);
@@ -240,9 +232,7 @@
             padding: 12px 14px;
             text-align: left;
             font-weight: 700;
-            text-transform: uppercase;
-            font-size: 11px;
-            letter-spacing: 0.5px;
+            font-size: 12px;
             white-space: nowrap;
             cursor: pointer;
             user-select: none;
@@ -261,7 +251,7 @@
         td {
             padding: 11px 14px;
             vertical-align: top;
-            max-width: 220px;
+            max-width: 200px;
         }
         td.truncate {
             white-space: nowrap;
@@ -274,12 +264,24 @@
             border-radius: 3px;
             font-size: 11px;
             font-weight: 700;
-            text-transform: uppercase;
         }
-        .badge-preserved { background: #DCFCE7; color: #166534; }
-        .badge-unpreserved { background: #FEE2E2; color: #991B1B; }
+        .badge-yes { background: #DCFCE7; color: #166534; }
+        .badge-no { background: #FEE2E2; color: #991B1B; }
 
-        /* Detail Modal */
+        /* 操作按钮 */
+        .btn-view {
+            padding: 5px 10px;
+            background: var(--navy);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 700;
+            margin-right: 4px;
+        }
+        .btn-view:hover { background: #1a3a6e; }
+
+        /* 弹窗 */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -294,9 +296,9 @@
         .modal-box {
             background: var(--white);
             border: 2px solid var(--navy);
-            max-width: 680px;
+            max-width: 700px;
             width: 100%;
-            max-height: 85vh;
+            max-height: 88vh;
             overflow-y: auto;
         }
         .modal-header {
@@ -308,12 +310,32 @@
             align-items: center;
             position: sticky;
             top: 0;
+            z-index: 10;
         }
         .modal-header h2 {
             font-size: 14px;
             font-weight: 800;
-            text-transform: uppercase;
             letter-spacing: 0.5px;
+        }
+        .modal-header-btns {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .copy-all-btn {
+            background: var(--gold);
+            color: var(--navy);
+            border: none;
+            padding: 7px 16px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            letter-spacing: 0.3px;
+        }
+        .copy-all-btn:hover { background: #b8922e; color: white; }
+        .copy-all-btn.copied {
+            background: var(--green);
+            color: white;
         }
         .modal-close {
             background: none;
@@ -336,7 +358,6 @@
         .detail-item label {
             font-size: 10px;
             font-weight: 700;
-            text-transform: uppercase;
             color: var(--muted);
             letter-spacing: 0.5px;
             display: block;
@@ -357,14 +378,26 @@
             white-space: pre-wrap;
         }
 
-        /* Empty/Loading states */
-        .empty-state {
-            text-align: center;
-            padding: 50px 20px;
-            color: var(--muted);
+        /* 复制成功提示 */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1E293B;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
         }
-        .empty-state .icon { font-size: 40px; margin-bottom: 10px; }
-        .empty-state p { font-size: 14px; }
+        .toast.show { opacity: 1; }
+
+        /* 空/加载状态 */
         .loading-row td {
             text-align: center;
             padding: 40px;
@@ -383,7 +416,7 @@
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Pagination */
+        /* 分页 */
         .pagination {
             display: flex;
             align-items: center;
@@ -407,128 +440,126 @@
         .page-btn:hover { background: var(--bg); }
         .page-btn.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
         .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
-        /* Auto-refresh indicator */
-        .refresh-timer {
-            font-size: 11px;
-            color: var(--muted);
-            font-family: monospace;
-        }
     </style>
 </head>
 <body>
 
-<!-- ==================== LOGIN SCREEN ==================== -->
+<!-- ==================== 登录页 ==================== -->
 <div id="loginScreen">
     <div class="login-box">
-        <h1>Admin Access</h1>
-        <p>US Leads Dashboard — Restricted Area</p>
-        <input type="password" id="adminPassword" placeholder="Enter password" onkeydown="if(event.key==='Enter')doLogin()">
-        <button class="login-btn" onclick="doLogin()">Access Dashboard</button>
-        <div class="login-error" id="loginError">Incorrect password. Access denied.</div>
+        <h1>后台管理入口</h1>
+        <p>US 客户信息系统 — 仅限授权人员</p>
+        <input type="password" id="adminPassword" placeholder="请输入管理密码" onkeydown="if(event.key==='Enter')doLogin()">
+        <button class="login-btn" onclick="doLogin()">进入后台</button>
+        <div class="login-error" id="loginError">密码错误，拒绝访问。</div>
     </div>
 </div>
 
-<!-- ==================== DASHBOARD ==================== -->
+<!-- ==================== 主面板 ==================== -->
 <div id="dashboard">
     <div class="top-bar">
-        <h1>&#9632; US Leads — Admin Dashboard</h1>
+        <h1>■ US 客户信息后台</h1>
         <div class="top-bar-right">
-            <span class="live-badge"><span class="live-dot"></span>Live</span>
-            <span class="refresh-timer" id="refreshTimer">Next refresh: 30s</span>
-            <button class="logout-btn" onclick="doLogout()">Logout</button>
+            <span class="live-badge"><span class="live-dot"></span>实时</span>
+            <button class="logout-btn" onclick="doLogout()">退出登录</button>
         </div>
     </div>
 
     <div class="dashboard-body">
-        <!-- Stats -->
+        <!-- 统计卡片 -->
         <div class="stats-row">
             <div class="stat-card">
                 <div class="s-num" id="statTotal">—</div>
-                <div class="s-label">Total Leads</div>
+                <div class="s-label">总客户数</div>
             </div>
             <div class="stat-card">
                 <div class="s-num" id="statToday">—</div>
-                <div class="s-label">Today</div>
+                <div class="s-label">今日新增</div>
             </div>
             <div class="stat-card">
                 <div class="s-num" id="statPreserved">—</div>
-                <div class="s-label">With Evidence</div>
+                <div class="s-label">有证据留存</div>
             </div>
             <div class="stat-card">
                 <div class="s-num" id="statTopLoss">—</div>
-                <div class="s-label">Top Loss Range</div>
+                <div class="s-label">最多损失金额</div>
             </div>
         </div>
 
-        <!-- Controls -->
+        <!-- 控制栏 -->
         <div class="controls-bar">
-            <input type="text" class="search-input" id="searchInput" placeholder="Search by name, phone, state, platform..." oninput="applyFilters()">
+            <input type="text" class="search-input" id="searchInput" placeholder="搜索姓名、电话、州份、平台..." oninput="applyFilters()">
             <select class="filter-select" id="filterCategory" onchange="applyFilters()">
-                <option value="">All Categories</option>
-                <option value="Crypto Investment Fraud">Crypto Fraud</option>
-                <option value="Romance Scam">Romance Scam</option>
-                <option value="Marketplace Settlement">Marketplace</option>
-                <option value="Wire Transfer Fraud">Wire Transfer</option>
-                <option value="Impersonation Fraud">Impersonation</option>
-                <option value="Other Financial Fraud">Other</option>
+                <option value="">全部类型</option>
+                <option value="Crypto / Digital Asset Investment Fraud">加密货币诈骗</option>
+                <option value="Romance Scam / Pig Butchering">杀猪盘 / 情感诈骗</option>
+                <option value="Platform Marketplace Non-Settlement Incident">平台交易纠纷</option>
+                <option value="Unauthorized Wire Transfer / ACH Fraud">未授权转账</option>
+                <option value="Government / Law Enforcement Impersonation">冒充执法机构</option>
+                <option value="Other Financial Fraud">其他金融诈骗</option>
             </select>
             <select class="filter-select" id="filterLedger" onchange="applyFilters()">
-                <option value="">All Evidence Status</option>
-                <option value="Preserved">With Evidence</option>
-                <option value="Unpreserved">No Evidence</option>
+                <option value="">全部证据状态</option>
+                <option value="Preserved">有证据</option>
+                <option value="Unpreserved">无证据</option>
             </select>
-            <button class="refresh-btn" onclick="loadLeads(true)">&#8635; Refresh</button>
-            <button class="export-btn" onclick="exportCSV()">&#8595; Export CSV</button>
+            <button class="refresh-btn" onclick="manualRefresh()">&#8635; 刷新订单</button>
+            <button class="export-btn" onclick="exportCSV()">&#8595; 导出 CSV</button>
         </div>
 
-        <!-- Table -->
+        <!-- 表格 -->
         <div class="table-wrapper">
             <table id="leadsTable">
                 <thead>
                     <tr>
                         <th onclick="sortBy('id')">#</th>
-                        <th onclick="sortBy('created_at')">Date / Time &#8597;</th>
-                        <th onclick="sortBy('legal_name')">Legal Name</th>
+                        <th onclick="sortBy('created_at')">提交时间 &#8597;</th>
+                        <th onclick="sortBy('legal_name')">姓名</th>
                         <th onclick="sortBy('whatsapp_terminal')">WhatsApp</th>
-                        <th onclick="sortBy('primary_residence')">State</th>
-                        <th onclick="sortBy('incident_category')">Category</th>
-                        <th onclick="sortBy('audited_loss')">Loss Amount</th>
-                        <th onclick="sortBy('ledger_status')">Evidence</th>
-                        <th>IP Address</th>
-                        <th>Detail</th>
+                        <th onclick="sortBy('primary_residence')">居住州</th>
+                        <th onclick="sortBy('incident_category')">案件类型</th>
+                        <th onclick="sortBy('audited_loss')">损失金额</th>
+                        <th onclick="sortBy('ledger_status')">证据</th>
+                        <th>IP 地址</th>
+                        <th>操作</th>
                     </tr>
                 </thead>
                 <tbody id="leadsBody">
-                    <tr class="loading-row"><td colspan="10"><span class="spinner"></span>Loading leads...</td></tr>
+                    <tr class="loading-row"><td colspan="10"><span class="spinner"></span>加载中...</td></tr>
                 </tbody>
             </table>
             <div class="pagination">
-                <span id="paginationInfo">Loading...</span>
+                <span id="paginationInfo">加载中...</span>
                 <div class="page-btns" id="pageBtns"></div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- ==================== DETAIL MODAL ==================== -->
+<!-- ==================== 详情弹窗 ==================== -->
 <div class="modal-overlay" id="detailModal">
     <div class="modal-box">
         <div class="modal-header">
-            <h2 id="modalTitle">Lead Detail</h2>
-            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h2 id="modalTitle">客户详情</h2>
+            <div class="modal-header-btns">
+                <button class="copy-all-btn" id="copyAllBtn" onclick="copyAllInfo()">&#128203; 一键复制全部信息</button>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
         </div>
         <div class="modal-body" id="modalBody"></div>
     </div>
 </div>
 
+<!-- 复制成功提示 -->
+<div class="toast" id="toast">已复制到剪贴板！</div>
+
 <script>
     // ==========================================
-    //  CONFIGURATION
+    //  配置
     // ==========================================
     const ADMIN_PASSWORD = 'Aa123456';
     const SUPABASE_URL = 'https://zarqthcmagsmruwqjqml.supabase.co';
-    // Service role key — used ONLY in admin.html, never in public index.html
+    // Service role key — 仅用于后台 admin.html，绝不放在前端 index.html
     const SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphcnF0aGNtYWdzbXJ1d3FqcW1sIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDg3MTE2MSwiZXhwIjoyMDk2NDQ3MTYxfQ.3Covj_pt6TNa27OHmeeYuxaH_BjcAuHl_xtcmUlBUWg';
 
     const PAGE_SIZE = 20;
@@ -537,11 +568,10 @@
     let currentPage = 1;
     let sortField = 'created_at';
     let sortAsc = false;
-    let refreshInterval = null;
-    let refreshCountdown = 30;
+    let currentLeadForCopy = null;
 
     // ==========================================
-    //  AUTH
+    //  登录 / 退出
     // ==========================================
     function doLogin() {
         const pw = document.getElementById('adminPassword').value;
@@ -549,7 +579,6 @@
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
             loadLeads(true);
-            startAutoRefresh();
         } else {
             document.getElementById('loginError').style.display = 'block';
             document.getElementById('adminPassword').value = '';
@@ -557,35 +586,32 @@
     }
 
     function doLogout() {
-        clearInterval(refreshInterval);
         document.getElementById('dashboard').style.display = 'none';
         document.getElementById('loginScreen').style.display = 'flex';
         document.getElementById('adminPassword').value = '';
+        allLeads = [];
     }
 
     // ==========================================
-    //  AUTO REFRESH
+    //  手动刷新
     // ==========================================
-    function startAutoRefresh() {
-        refreshCountdown = 30;
-        clearInterval(refreshInterval);
-        refreshInterval = setInterval(() => {
-            refreshCountdown--;
-            document.getElementById('refreshTimer').textContent = `Next refresh: ${refreshCountdown}s`;
-            if (refreshCountdown <= 0) {
-                loadLeads(false);
-                refreshCountdown = 30;
-            }
-        }, 1000);
+    function manualRefresh() {
+        const btn = document.querySelector('.refresh-btn');
+        btn.textContent = '刷新中...';
+        btn.disabled = true;
+        loadLeads(true).finally(() => {
+            btn.innerHTML = '&#8635; 刷新订单';
+            btn.disabled = false;
+        });
     }
 
     // ==========================================
-    //  LOAD LEADS FROM SUPABASE
+    //  从 Supabase 加载数据
     // ==========================================
     async function loadLeads(showLoading = false) {
         if (showLoading) {
             document.getElementById('leadsBody').innerHTML =
-                '<tr class="loading-row"><td colspan="10"><span class="spinner"></span>Loading leads...</td></tr>';
+                '<tr class="loading-row"><td colspan="10"><span class="spinner"></span>加载中...</td></tr>';
         }
         try {
             const res = await fetch(
@@ -604,7 +630,7 @@
             allLeads = data;
             updateStats();
             applyFilters();
-            // Highlight new rows if count increased
+            // 高亮新增行
             if (prevCount > 0 && allLeads.length > prevCount) {
                 setTimeout(() => {
                     const rows = document.querySelectorAll('#leadsBody tr');
@@ -613,15 +639,15 @@
                     }
                 }, 100);
             }
-            document.getElementById('refreshTimer').textContent = `Next refresh: ${refreshCountdown}s`;
         } catch (e) {
             document.getElementById('leadsBody').innerHTML =
-                `<tr class="loading-row"><td colspan="10" style="color:#B91C1C;">Error loading data: ${e.message}</td></tr>`;
+                `<tr class="loading-row"><td colspan="10" style="color:#B91C1C;">加载失败：${e.message}</td></tr>`;
+            throw e;
         }
     }
 
     // ==========================================
-    //  STATS
+    //  统计数据
     // ==========================================
     function updateStats() {
         document.getElementById('statTotal').textContent = allLeads.length;
@@ -630,20 +656,21 @@
         const todayCount = allLeads.filter(l => l.created_at && l.created_at.startsWith(today)).length;
         document.getElementById('statToday').textContent = todayCount;
 
-        const preserved = allLeads.filter(l => l.ledger_status === 'Preserved').length;
+        const preserved = allLeads.filter(l =>
+            l.ledger_status && l.ledger_status.toLowerCase().includes('preserved')
+        ).length;
         document.getElementById('statPreserved').textContent = preserved;
 
-        // Top loss range
         const lossCounts = {};
         allLeads.forEach(l => {
             if (l.audited_loss) lossCounts[l.audited_loss] = (lossCounts[l.audited_loss] || 0) + 1;
         });
         const topLoss = Object.entries(lossCounts).sort((a, b) => b[1] - a[1])[0];
-        document.getElementById('statTopLoss').textContent = topLoss ? topLoss[0].replace('$', '$') : '—';
+        document.getElementById('statTopLoss').textContent = topLoss ? topLoss[0] : '—';
     }
 
     // ==========================================
-    //  FILTER & SORT
+    //  筛选 & 排序
     // ==========================================
     function applyFilters() {
         const search = document.getElementById('searchInput').value.toLowerCase();
@@ -657,12 +684,11 @@
                 (l.primary_residence || '').toLowerCase().includes(search) ||
                 (l.transmitting_channel || '').toLowerCase().includes(search) ||
                 (l.incident_category || '').toLowerCase().includes(search);
-            const matchCat = !cat || l.incident_category === cat;
-            const matchLedger = !ledger || l.ledger_status === ledger;
+            const matchCat = !cat || (l.incident_category || '') === cat;
+            const matchLedger = !ledger || (l.ledger_status || '') === ledger;
             return matchSearch && matchCat && matchLedger;
         });
 
-        // Sort
         filteredLeads.sort((a, b) => {
             let av = a[sortField] || '';
             let bv = b[sortField] || '';
@@ -683,7 +709,7 @@
     }
 
     // ==========================================
-    //  RENDER TABLE
+    //  渲染表格
     // ==========================================
     function renderTable() {
         const tbody = document.getElementById('leadsBody');
@@ -691,34 +717,36 @@
         const pageData = filteredLeads.slice(start, start + PAGE_SIZE);
 
         if (filteredLeads.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:40px;color:#64748B;">No leads found.</td></tr>';
-            document.getElementById('paginationInfo').textContent = '0 leads';
+            tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:40px;color:#64748B;">暂无客户数据。</td></tr>';
+            document.getElementById('paginationInfo').textContent = '共 0 条';
             document.getElementById('pageBtns').innerHTML = '';
             return;
         }
 
-        tbody.innerHTML = pageData.map(lead => `
+        tbody.innerHTML = pageData.map(lead => {
+            const hasEvidence = lead.ledger_status && lead.ledger_status.toLowerCase().includes('preserved');
+            return `
             <tr>
-                <td>${lead.id}</td>
+                <td style="font-family:monospace;color:#64748B;">${lead.id}</td>
                 <td class="truncate" style="font-family:monospace;font-size:12px;">${formatDate(lead.created_at)}</td>
                 <td class="truncate"><strong>${esc(lead.legal_name)}</strong></td>
                 <td class="truncate" style="font-family:monospace;">${esc(lead.whatsapp_terminal)}</td>
                 <td class="truncate">${esc(lead.primary_residence)}</td>
                 <td class="truncate" style="font-size:12px;">${esc(lead.incident_category)}</td>
-                <td class="truncate" style="font-size:12px;font-weight:600;">${esc(lead.audited_loss)}</td>
-                <td><span class="badge ${lead.ledger_status === 'Preserved' ? 'badge-preserved' : 'badge-unpreserved'}">${esc(lead.ledger_status)}</span></td>
+                <td class="truncate" style="font-size:12px;font-weight:600;color:#B91C1C;">${esc(lead.audited_loss)}</td>
+                <td><span class="badge ${hasEvidence ? 'badge-yes' : 'badge-no'}">${hasEvidence ? '有' : '无'}</span></td>
                 <td class="truncate" style="font-family:monospace;font-size:11px;color:#64748B;">${esc(lead.ip_address || '—')}</td>
-                <td><button onclick="showDetail(${lead.id})" style="padding:5px 10px;background:var(--navy);color:white;border:none;cursor:pointer;font-size:11px;font-weight:700;">VIEW</button></td>
-            </tr>
-        `).join('');
+                <td><button class="btn-view" onclick="showDetail(${lead.id})">查看详情</button></td>
+            </tr>`;
+        }).join('');
 
-        // Pagination
+        // 分页
         const totalPages = Math.ceil(filteredLeads.length / PAGE_SIZE);
         document.getElementById('paginationInfo').textContent =
-            `Showing ${start + 1}–${Math.min(start + PAGE_SIZE, filteredLeads.length)} of ${filteredLeads.length} leads`;
+            `显示第 ${start + 1}–${Math.min(start + PAGE_SIZE, filteredLeads.length)} 条，共 ${filteredLeads.length} 条`;
 
         let pageBtns = '';
-        pageBtns += `<button class="page-btn" onclick="goPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>&laquo; Prev</button>`;
+        pageBtns += `<button class="page-btn" onclick="goPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>&laquo; 上一页</button>`;
         const maxBtns = 5;
         let startPage = Math.max(1, currentPage - 2);
         let endPage = Math.min(totalPages, startPage + maxBtns - 1);
@@ -726,7 +754,7 @@
         for (let i = startPage; i <= endPage; i++) {
             pageBtns += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goPage(${i})">${i}</button>`;
         }
-        pageBtns += `<button class="page-btn" onclick="goPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>Next &raquo;</button>`;
+        pageBtns += `<button class="page-btn" onclick="goPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>下一页 &raquo;</button>`;
         document.getElementById('pageBtns').innerHTML = pageBtns;
     }
 
@@ -739,68 +767,75 @@
     }
 
     // ==========================================
-    //  DETAIL MODAL
+    //  详情弹窗
     // ==========================================
     function showDetail(id) {
         const lead = allLeads.find(l => l.id === id);
         if (!lead) return;
-        document.getElementById('modalTitle').textContent = `Lead #${lead.id} — ${lead.legal_name || 'Unknown'}`;
+        currentLeadForCopy = lead;
+
+        const hasEvidence = lead.ledger_status && lead.ledger_status.toLowerCase().includes('preserved');
+
+        document.getElementById('modalTitle').textContent = `客户 #${lead.id} — ${lead.legal_name || '未知'}`;
+        document.getElementById('copyAllBtn').textContent = '📋 一键复制全部信息';
+        document.getElementById('copyAllBtn').classList.remove('copied');
+
         document.getElementById('modalBody').innerHTML = `
             <div class="detail-grid">
                 <div class="detail-item">
-                    <label>Submission Date/Time</label>
+                    <label>提交时间</label>
                     <div class="val">${formatDateFull(lead.created_at)}</div>
                 </div>
                 <div class="detail-item">
-                    <label>IP Address</label>
+                    <label>IP 地址</label>
                     <div class="val" style="font-family:monospace;">${esc(lead.ip_address || '—')}</div>
                 </div>
                 <div class="detail-item">
-                    <label>Legal Name</label>
+                    <label>姓名（Legal Name）</label>
                     <div class="val"><strong>${esc(lead.legal_name)}</strong></div>
                 </div>
                 <div class="detail-item">
-                    <label>WhatsApp Terminal</label>
+                    <label>WhatsApp 电话</label>
                     <div class="val" style="font-family:monospace;">${esc(lead.whatsapp_terminal)}</div>
                 </div>
                 <div class="detail-item">
-                    <label>Gender</label>
+                    <label>性别（Gender）</label>
                     <div class="val">${esc(lead.biological_gender || '—')}</div>
                 </div>
                 <div class="detail-item">
-                    <label>Age</label>
+                    <label>年龄（Age）</label>
                     <div class="val">${esc(lead.verified_age || '—')}</div>
                 </div>
                 <div class="detail-item">
-                    <label>Primary Residence</label>
+                    <label>居住州（State）</label>
                     <div class="val">${esc(lead.primary_residence)}</div>
                 </div>
                 <div class="detail-item">
-                    <label>Incident Category</label>
+                    <label>案件类型（Incident Category）</label>
                     <div class="val">${esc(lead.incident_category)}</div>
                 </div>
                 <div class="detail-item">
-                    <label>Audited Loss (USD)</label>
-                    <div class="val" style="font-weight:700;color:#B91C1C;">${esc(lead.audited_loss)}</div>
+                    <label>损失金额（Loss Amount）</label>
+                    <div class="val" style="font-weight:700;color:#B91C1C;font-size:16px;">${esc(lead.audited_loss)}</div>
                 </div>
                 <div class="detail-item">
-                    <label>Transmitting Channel</label>
+                    <label>诈骗平台（Platform）</label>
                     <div class="val">${esc(lead.transmitting_channel)}</div>
                 </div>
                 <div class="detail-item">
-                    <label>Evidence / Ledger Status</label>
-                    <div class="val"><span class="badge ${lead.ledger_status === 'Preserved' ? 'badge-preserved' : 'badge-unpreserved'}">${esc(lead.ledger_status)}</span></div>
+                    <label>证据留存（Evidence）</label>
+                    <div class="val"><span class="badge ${hasEvidence ? 'badge-yes' : 'badge-no'}">${esc(lead.ledger_status)}</span></div>
                 </div>
                 <div class="detail-item">
-                    <label>Digital Signature</label>
+                    <label>数字签名（Signature）</label>
                     <div class="val" style="font-style:italic;">"${esc(lead.digital_signature)}"</div>
                 </div>
                 <div class="detail-item full">
-                    <label>Event Chronology (Full Narrative)</label>
+                    <label>案情描述（Event Chronology）</label>
                     <div class="val narrative">${esc(lead.event_chronology)}</div>
                 </div>
                 <div class="detail-item full">
-                    <label>User Agent</label>
+                    <label>浏览器信息（User Agent）</label>
                     <div class="val" style="font-size:11px;color:#64748B;font-family:monospace;word-break:break-all;">${esc(lead.user_agent || '—')}</div>
                 </div>
             </div>
@@ -810,16 +845,79 @@
 
     function closeModal() {
         document.getElementById('detailModal').classList.remove('open');
+        currentLeadForCopy = null;
     }
     document.getElementById('detailModal').addEventListener('click', function(e) {
         if (e.target === this) closeModal();
     });
 
     // ==========================================
-    //  EXPORT CSV
+    //  一键复制全部信息
+    // ==========================================
+    function copyAllInfo() {
+        const lead = currentLeadForCopy;
+        if (!lead) return;
+
+        const text = [
+            `【客户信息 #${lead.id}】`,
+            `提交时间：${formatDateFull(lead.created_at)}`,
+            ``,
+            `── 个人信息 ──`,
+            `姓名：${lead.legal_name || '—'}`,
+            `性别：${lead.biological_gender || '—'}`,
+            `年龄：${lead.verified_age || '—'}`,
+            `居住州：${lead.primary_residence || '—'}`,
+            `WhatsApp：${lead.whatsapp_terminal || '—'}`,
+            ``,
+            `── 案件信息 ──`,
+            `案件类型：${lead.incident_category || '—'}`,
+            `损失金额：${lead.audited_loss || '—'}`,
+            `诈骗平台：${lead.transmitting_channel || '—'}`,
+            `证据留存：${lead.ledger_status || '—'}`,
+            `数字签名：${lead.digital_signature || '—'}`,
+            ``,
+            `── 案情描述 ──`,
+            `${lead.event_chronology || '—'}`,
+            ``,
+            `── 技术信息 ──`,
+            `IP 地址：${lead.ip_address || '—'}`,
+        ].join('\n');
+
+        navigator.clipboard.writeText(text).then(() => {
+            const btn = document.getElementById('copyAllBtn');
+            btn.textContent = '✅ 已复制！';
+            btn.classList.add('copied');
+            showToast('已复制到剪贴板！');
+            setTimeout(() => {
+                btn.textContent = '📋 一键复制全部信息';
+                btn.classList.remove('copied');
+            }, 3000);
+        }).catch(() => {
+            // 降级方案
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            showToast('已复制到剪贴板！');
+        });
+    }
+
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // ==========================================
+    //  导出 CSV
     // ==========================================
     function exportCSV() {
-        const headers = ['ID', 'Date', 'Legal Name', 'WhatsApp', 'Gender', 'Age', 'State', 'Category', 'Loss Amount', 'Platform', 'Evidence', 'Signature', 'Chronology', 'IP Address', 'User Agent'];
+        const headers = ['编号', '提交时间', '姓名', 'WhatsApp', '性别', '年龄', '居住州', '案件类型', '损失金额', '诈骗平台', '证据', '数字签名', '案情描述', 'IP地址'];
         const rows = filteredLeads.map(l => [
             l.id,
             formatDateFull(l.created_at),
@@ -834,8 +932,7 @@
             l.ledger_status,
             l.digital_signature,
             (l.event_chronology || '').replace(/\n/g, ' '),
-            l.ip_address,
-            l.user_agent
+            l.ip_address
         ].map(v => `"${String(v || '').replace(/"/g, '""')}"`));
 
         const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
@@ -843,13 +940,13 @@
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `us-leads-${new Date().toISOString().slice(0, 10)}.csv`;
+        a.download = `us-客户信息-${new Date().toISOString().slice(0, 10)}.csv`;
         a.click();
         URL.revokeObjectURL(url);
     }
 
     // ==========================================
-    //  UTILS
+    //  工具函数
     // ==========================================
     function esc(str) {
         if (!str) return '';
@@ -859,17 +956,17 @@
     function formatDate(iso) {
         if (!iso) return '—';
         const d = new Date(iso);
-        return d.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: '2-digit' }) +
-               ' ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+        return d.toLocaleDateString('zh-CN', { year: '2-digit', month: '2-digit', day: '2-digit' }) +
+               ' ' + d.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', hour12: false });
     }
 
     function formatDateFull(iso) {
         if (!iso) return '—';
         const d = new Date(iso);
-        return d.toLocaleString('en-US', {
-            year: 'numeric', month: 'short', day: '2-digit',
+        return d.toLocaleString('zh-CN', {
+            year: 'numeric', month: '2-digit', day: '2-digit',
             hour: '2-digit', minute: '2-digit', second: '2-digit',
-            hour12: false, timeZoneName: 'short'
+            hour12: false
         });
     }
 </script>
