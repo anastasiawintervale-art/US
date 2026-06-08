@@ -721,13 +721,20 @@
             const success = await routeToDatabasePipeline(payload);
 
             if (success) {
-                // FB Pixel: Lead event
+                // FB Pixel: Lead + CompleteRegistration events
                 if (typeof fbq !== 'undefined') {
                     fbq('track', 'Lead', {
                         content_name: 'Dossier Intake',
                         content_category: payload.incident_category,
                         value: 0,
                         currency: 'USD'
+                    });
+                    fbq('track', 'CompleteRegistration', {
+                        content_name: 'Dossier Intake',
+                        content_category: payload.incident_category,
+                        status: 'submitted',
+                        currency: 'USD',
+                        value: 0
                     });
                 }
                 // Show success screen
