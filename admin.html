@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin — US Leads Dashboard</title>
+    <style>
+        :root {
+            --navy: #0F2044;
+            --gold: #C9A84C;
+            --blue: #1D4ED8;
+            --red: #B91C1C;
+            --green: #15803D;
+            --bg: #F1F5F9;
+            --white: #FFFFFF;
+            --border: #CBD5E1;
+            --text: #1E293B;
+            --muted: #64748B;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ---- LOGIN SCREEN ---- */
+        #loginScreen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: var(--navy);
+        }
+        .login-box {
+            background: var(--white);
+            border: 3px solid var(--gold);
+            padding: 40px;
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+        }
+        .login-box h1 {
+            font-size: 18px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--navy);
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+        .login-box p {
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 24px;
+        }
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            font-size: 15px;
+            margin-bottom: 14px;
+            outline: none;
+            font-family: monospace;
+            letter-spacing: 2px;
+        }
+        .login-box input:focus { border-color: var(--navy); }
+        .login-btn {
+            width: 100%;
+            padding: 13px;
+            background: var(--navy);
+            color: var(--white);
+            border: none;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+        }
+        .login-btn:hover { background: #1a3a6e; }
+        .login-error {
+            color: var(--red);
+            font-size: 12px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* ---- DASHBOARD ---- */
+        #dashboard { display: none; }
+
+        .top-bar {
+            background: var(--navy);
+            color: var(--white);
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 3px solid var(--gold);
+        }
+        .top-bar h1 {
+            font-size: 16px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .top-bar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .live-badge {
+            background: var(--green);
+            color: var(--white);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .live-dot {
+            width: 7px;
+            height: 7px;
+            background: #86efac;
+            border-radius: 50%;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        .logout-btn {
+            background: transparent;
+            color: #94A3B8;
+            border: 1px solid #475569;
+            padding: 6px 14px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .logout-btn:hover { color: var(--white); border-color: var(--white); }
+
+        .dashboard-body { padding: 24px; }
+
+        /* Stats Cards */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-top: 4px solid var(--navy);
+            padding: 18px;
+        }
+        .stat-card .s-num {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--navy);
+            font-family: monospace;
+        }
+        .stat-card .s-label {
+            font-size: 11px;
+            color: var(--muted);
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 4px;
+            letter-spacing: 0.3px;
+        }
+
+        /* Controls */
+        .controls-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .search-input {
+            padding: 9px 14px;
+            border: 1px solid var(--border);
+            font-size: 13px;
+            outline: none;
+            flex: 1;
+            min-width: 200px;
+        }
+        .search-input:focus { border-color: var(--navy); }
+        .filter-select {
+            padding: 9px 12px;
+            border: 1px solid var(--border);
+            font-size: 13px;
+            outline: none;
+            background: var(--white);
+            cursor: pointer;
+        }
+        .refresh-btn {
+            padding: 9px 18px;
+            background: var(--navy);
+            color: var(--white);
+            border: none;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        .refresh-btn:hover { background: #1a3a6e; }
+        .export-btn {
+            padding: 9px 18px;
+            background: var(--green);
+            color: var(--white);
+            border: none;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        .export-btn:hover { background: #166534; }
+
+        /* Table */
+        .table-wrapper {
+            background: var(--white);
+            border: 1px solid var(--border);
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        thead {
+            background: var(--navy);
+            color: var(--white);
+        }
+        thead th {
+            padding: 12px 14px;
+            text-align: left;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            cursor: pointer;
+            user-select: none;
+        }
+        thead th:hover { background: #1a3a6e; }
+        tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s;
+        }
+        tbody tr:hover { background: #F8FAFC; }
+        tbody tr.new-row { animation: highlight 2s ease-out; }
+        @keyframes highlight {
+            0% { background: #FEF9C3; }
+            100% { background: transparent; }
+        }
+        td {
+            padding: 11px 14px;
+            vertical-align: top;
+            max-width: 220px;
+        }
+        td.truncate {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .badge-preserved { background: #DCFCE7; color: #166534; }
+        .badge-unpreserved { background: #FEE2E2; color: #991B1B; }
+
+        /* Detail Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal-box {
+            background: var(--white);
+            border: 2px solid var(--navy);
+            max-width: 680px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            background: var(--navy);
+            color: var(--white);
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+        }
+        .modal-header h2 {
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 22px;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .modal-body { padding: 20px; }
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+        @media (max-width: 500px) {
+            .detail-grid { grid-template-columns: 1fr; }
+        }
+        .detail-item label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--muted);
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 3px;
+        }
+        .detail-item .val {
+            font-size: 14px;
+            color: var(--text);
+            word-break: break-word;
+        }
+        .detail-item.full { grid-column: 1 / -1; }
+        .detail-item .val.narrative {
+            background: #F8FAFC;
+            border: 1px solid var(--border);
+            padding: 10px;
+            font-size: 13px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        /* Empty/Loading states */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--muted);
+        }
+        .empty-state .icon { font-size: 40px; margin-bottom: 10px; }
+        .empty-state p { font-size: 14px; }
+        .loading-row td {
+            text-align: center;
+            padding: 40px;
+            color: var(--muted);
+        }
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #CBD5E1;
+            border-top-color: var(--navy);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            border-top: 1px solid var(--border);
+            font-size: 13px;
+            color: var(--muted);
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .page-btns { display: flex; gap: 6px; }
+        .page-btn {
+            padding: 6px 12px;
+            border: 1px solid var(--border);
+            background: var(--white);
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .page-btn:hover { background: var(--bg); }
+        .page-btn.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
+        .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        /* Auto-refresh indicator */
+        .refresh-timer {
+            font-size: 11px;
+            color: var(--muted);
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ==================== LOGIN SCREEN ==================== -->
+<div id="loginScreen">
+    <div class="login-box">
+        <h1>Admin Access</h1>
+        <p>US Leads Dashboard — Restricted Area</p>
+        <input type="password" id="adminPassword" placeholder="Enter password" onkeydown="if(event.key==='Enter')doLogin()">
+        <button class="login-btn" onclick="doLogin()">Access Dashboard</button>
+        <div class="login-error" id="loginError">Incorrect password. Access denied.</div>
+    </div>
+</div>
+
+<!-- ==================== DASHBOARD ==================== -->
+<div id="dashboard">
+    <div class="top-bar">
+        <h1>&#9632; US Leads — Admin Dashboard</h1>
+        <div class="top-bar-right">
+            <span class="live-badge"><span class="live-dot"></span>Live</span>
+            <span class="refresh-timer" id="refreshTimer">Next refresh: 30s</span>
+            <button class="logout-btn" onclick="doLogout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="dashboard-body">
+        <!-- Stats -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="s-num" id="statTotal">—</div>
+                <div class="s-label">Total Leads</div>
+            </div>
+            <div class="stat-card">
+                <div class="s-num" id="statToday">—</div>
+                <div class="s-label">Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="s-num" id="statPreserved">—</div>
+                <div class="s-label">With Evidence</div>
+            </div>
+            <div class="stat-card">
+                <div class="s-num" id="statTopLoss">—</div>
+                <div class="s-label">Top Loss Range</div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls-bar">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search by name, phone, state, platform..." oninput="applyFilters()">
+            <select class="filter-select" id="filterCategory" onchange="applyFilters()">
+                <option value="">All Categories</option>
+                <option value="Crypto Investment Fraud">Crypto Fraud</option>
+                <option value="Romance Scam">Romance Scam</option>
+                <option value="Marketplace Settlement">Marketplace</option>
+                <option value="Wire Transfer Fraud">Wire Transfer</option>
+                <option value="Impersonation Fraud">Impersonation</option>
+                <option value="Other Financial Fraud">Other</option>
+            </select>
+            <select class="filter-select" id="filterLedger" onchange="applyFilters()">
+                <option value="">All Evidence Status</option>
+                <option value="Preserved">With Evidence</option>
+                <option value="Unpreserved">No Evidence</option>
+            </select>
+            <button class="refresh-btn" onclick="loadLeads(true)">&#8635; Refresh</button>
+            <button class="export-btn" onclick="exportCSV()">&#8595; Export CSV</button>
+        </div>
+
+        <!-- Table -->
+        <div class="table-wrapper">
+            <table id="leadsTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortBy('id')">#</th>
+                        <th onclick="sortBy('created_at')">Date / Time &#8597;</th>
+                        <th onclick="sortBy('legal_name')">Legal Name</th>
+                        <th onclick="sortBy('whatsapp_terminal')">WhatsApp</th>
+                        <th onclick="sortBy('primary_residence')">State</th>
+                        <th onclick="sortBy('incident_category')">Category</th>
+                        <th onclick="sortBy('audited_loss')">Loss Amount</th>
+                        <th onclick="sortBy('ledger_status')">Evidence</th>
+                        <th>IP Address</th>
+                        <th>Detail</th>
+                    </tr>
+                </thead>
+                <tbody id="leadsBody">
+                    <tr class="loading-row"><td colspan="10"><span class="spinner"></span>Loading leads...</td></tr>
+                </tbody>
+            </table>
+            <div class="pagination">
+                <span id="paginationInfo">Loading...</span>
+                <div class="page-btns" id="pageBtns"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== DETAIL MODAL ==================== -->
+<div class="modal-overlay" id="detailModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h2 id="modalTitle">Lead Detail</h2>
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+    </div>
+</div>
+
+<script>
+    // ==========================================
+    //  CONFIGURATION
+    // ==========================================
+    const ADMIN_PASSWORD = 'Aa123456';
+    const SUPABASE_URL = 'https://zarqthcmagsmruwqjqml.supabase.co';
+    // Service role key — used ONLY in admin.html, never in public index.html
+    const SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphcnF0aGNtYWdzbXJ1d3FqcW1sIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDg3MTE2MSwiZXhwIjoyMDk2NDQ3MTYxfQ.3Covj_pt6TNa27OHmeeYuxaH_BjcAuHl_xtcmUlBUWg';
+
+    const PAGE_SIZE = 20;
+    let allLeads = [];
+    let filteredLeads = [];
+    let currentPage = 1;
+    let sortField = 'created_at';
+    let sortAsc = false;
+    let refreshInterval = null;
+    let refreshCountdown = 30;
+
+    // ==========================================
+    //  AUTH
+    // ==========================================
+    function doLogin() {
+        const pw = document.getElementById('adminPassword').value;
+        if (pw === ADMIN_PASSWORD) {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            loadLeads(true);
+            startAutoRefresh();
+        } else {
+            document.getElementById('loginError').style.display = 'block';
+            document.getElementById('adminPassword').value = '';
+        }
+    }
+
+    function doLogout() {
+        clearInterval(refreshInterval);
+        document.getElementById('dashboard').style.display = 'none';
+        document.getElementById('loginScreen').style.display = 'flex';
+        document.getElementById('adminPassword').value = '';
+    }
+
+    // ==========================================
+    //  AUTO REFRESH
+    // ==========================================
+    function startAutoRefresh() {
+        refreshCountdown = 30;
+        clearInterval(refreshInterval);
+        refreshInterval = setInterval(() => {
+            refreshCountdown--;
+            document.getElementById('refreshTimer').textContent = `Next refresh: ${refreshCountdown}s`;
+            if (refreshCountdown <= 0) {
+                loadLeads(false);
+                refreshCountdown = 30;
+            }
+        }, 1000);
+    }
+
+    // ==========================================
+    //  LOAD LEADS FROM SUPABASE
+    // ==========================================
+    async function loadLeads(showLoading = false) {
+        if (showLoading) {
+            document.getElementById('leadsBody').innerHTML =
+                '<tr class="loading-row"><td colspan="10"><span class="spinner"></span>Loading leads...</td></tr>';
+        }
+        try {
+            const res = await fetch(
+                `${SUPABASE_URL}/rest/v1/leads?select=*&order=created_at.desc&limit=1000`,
+                {
+                    headers: {
+                        'apikey': SERVICE_KEY,
+                        'Authorization': `Bearer ${SERVICE_KEY}`,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            const prevCount = allLeads.length;
+            allLeads = data;
+            updateStats();
+            applyFilters();
+            // Highlight new rows if count increased
+            if (prevCount > 0 && allLeads.length > prevCount) {
+                setTimeout(() => {
+                    const rows = document.querySelectorAll('#leadsBody tr');
+                    for (let i = 0; i < allLeads.length - prevCount; i++) {
+                        if (rows[i]) rows[i].classList.add('new-row');
+                    }
+                }, 100);
+            }
+            document.getElementById('refreshTimer').textContent = `Next refresh: ${refreshCountdown}s`;
+        } catch (e) {
+            document.getElementById('leadsBody').innerHTML =
+                `<tr class="loading-row"><td colspan="10" style="color:#B91C1C;">Error loading data: ${e.message}</td></tr>`;
+        }
+    }
+
+    // ==========================================
+    //  STATS
+    // ==========================================
+    function updateStats() {
+        document.getElementById('statTotal').textContent = allLeads.length;
+
+        const today = new Date().toISOString().slice(0, 10);
+        const todayCount = allLeads.filter(l => l.created_at && l.created_at.startsWith(today)).length;
+        document.getElementById('statToday').textContent = todayCount;
+
+        const preserved = allLeads.filter(l => l.ledger_status === 'Preserved').length;
+        document.getElementById('statPreserved').textContent = preserved;
+
+        // Top loss range
+        const lossCounts = {};
+        allLeads.forEach(l => {
+            if (l.audited_loss) lossCounts[l.audited_loss] = (lossCounts[l.audited_loss] || 0) + 1;
+        });
+        const topLoss = Object.entries(lossCounts).sort((a, b) => b[1] - a[1])[0];
+        document.getElementById('statTopLoss').textContent = topLoss ? topLoss[0].replace('$', '$') : '—';
+    }
+
+    // ==========================================
+    //  FILTER & SORT
+    // ==========================================
+    function applyFilters() {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const cat = document.getElementById('filterCategory').value;
+        const ledger = document.getElementById('filterLedger').value;
+
+        filteredLeads = allLeads.filter(l => {
+            const matchSearch = !search ||
+                (l.legal_name || '').toLowerCase().includes(search) ||
+                (l.whatsapp_terminal || '').toLowerCase().includes(search) ||
+                (l.primary_residence || '').toLowerCase().includes(search) ||
+                (l.transmitting_channel || '').toLowerCase().includes(search) ||
+                (l.incident_category || '').toLowerCase().includes(search);
+            const matchCat = !cat || l.incident_category === cat;
+            const matchLedger = !ledger || l.ledger_status === ledger;
+            return matchSearch && matchCat && matchLedger;
+        });
+
+        // Sort
+        filteredLeads.sort((a, b) => {
+            let av = a[sortField] || '';
+            let bv = b[sortField] || '';
+            if (sortField === 'id') { av = Number(av); bv = Number(bv); }
+            if (av < bv) return sortAsc ? -1 : 1;
+            if (av > bv) return sortAsc ? 1 : -1;
+            return 0;
+        });
+
+        currentPage = 1;
+        renderTable();
+    }
+
+    function sortBy(field) {
+        if (sortField === field) sortAsc = !sortAsc;
+        else { sortField = field; sortAsc = false; }
+        applyFilters();
+    }
+
+    // ==========================================
+    //  RENDER TABLE
+    // ==========================================
+    function renderTable() {
+        const tbody = document.getElementById('leadsBody');
+        const start = (currentPage - 1) * PAGE_SIZE;
+        const pageData = filteredLeads.slice(start, start + PAGE_SIZE);
+
+        if (filteredLeads.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:40px;color:#64748B;">No leads found.</td></tr>';
+            document.getElementById('paginationInfo').textContent = '0 leads';
+            document.getElementById('pageBtns').innerHTML = '';
+            return;
+        }
+
+        tbody.innerHTML = pageData.map(lead => `
+            <tr>
+                <td>${lead.id}</td>
+                <td class="truncate" style="font-family:monospace;font-size:12px;">${formatDate(lead.created_at)}</td>
+                <td class="truncate"><strong>${esc(lead.legal_name)}</strong></td>
+                <td class="truncate" style="font-family:monospace;">${esc(lead.whatsapp_terminal)}</td>
+                <td class="truncate">${esc(lead.primary_residence)}</td>
+                <td class="truncate" style="font-size:12px;">${esc(lead.incident_category)}</td>
+                <td class="truncate" style="font-size:12px;font-weight:600;">${esc(lead.audited_loss)}</td>
+                <td><span class="badge ${lead.ledger_status === 'Preserved' ? 'badge-preserved' : 'badge-unpreserved'}">${esc(lead.ledger_status)}</span></td>
+                <td class="truncate" style="font-family:monospace;font-size:11px;color:#64748B;">${esc(lead.ip_address || '—')}</td>
+                <td><button onclick="showDetail(${lead.id})" style="padding:5px 10px;background:var(--navy);color:white;border:none;cursor:pointer;font-size:11px;font-weight:700;">VIEW</button></td>
+            </tr>
+        `).join('');
+
+        // Pagination
+        const totalPages = Math.ceil(filteredLeads.length / PAGE_SIZE);
+        document.getElementById('paginationInfo').textContent =
+            `Showing ${start + 1}–${Math.min(start + PAGE_SIZE, filteredLeads.length)} of ${filteredLeads.length} leads`;
+
+        let pageBtns = '';
+        pageBtns += `<button class="page-btn" onclick="goPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>&laquo; Prev</button>`;
+        const maxBtns = 5;
+        let startPage = Math.max(1, currentPage - 2);
+        let endPage = Math.min(totalPages, startPage + maxBtns - 1);
+        if (endPage - startPage < maxBtns - 1) startPage = Math.max(1, endPage - maxBtns + 1);
+        for (let i = startPage; i <= endPage; i++) {
+            pageBtns += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goPage(${i})">${i}</button>`;
+        }
+        pageBtns += `<button class="page-btn" onclick="goPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>Next &raquo;</button>`;
+        document.getElementById('pageBtns').innerHTML = pageBtns;
+    }
+
+    function goPage(p) {
+        const totalPages = Math.ceil(filteredLeads.length / PAGE_SIZE);
+        if (p < 1 || p > totalPages) return;
+        currentPage = p;
+        renderTable();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ==========================================
+    //  DETAIL MODAL
+    // ==========================================
+    function showDetail(id) {
+        const lead = allLeads.find(l => l.id === id);
+        if (!lead) return;
+        document.getElementById('modalTitle').textContent = `Lead #${lead.id} — ${lead.legal_name || 'Unknown'}`;
+        document.getElementById('modalBody').innerHTML = `
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <label>Submission Date/Time</label>
+                    <div class="val">${formatDateFull(lead.created_at)}</div>
+                </div>
+                <div class="detail-item">
+                    <label>IP Address</label>
+                    <div class="val" style="font-family:monospace;">${esc(lead.ip_address || '—')}</div>
+                </div>
+                <div class="detail-item">
+                    <label>Legal Name</label>
+                    <div class="val"><strong>${esc(lead.legal_name)}</strong></div>
+                </div>
+                <div class="detail-item">
+                    <label>WhatsApp Terminal</label>
+                    <div class="val" style="font-family:monospace;">${esc(lead.whatsapp_terminal)}</div>
+                </div>
+                <div class="detail-item">
+                    <label>Gender</label>
+                    <div class="val">${esc(lead.biological_gender || '—')}</div>
+                </div>
+                <div class="detail-item">
+                    <label>Age</label>
+                    <div class="val">${esc(lead.verified_age || '—')}</div>
+                </div>
+                <div class="detail-item">
+                    <label>Primary Residence</label>
+                    <div class="val">${esc(lead.primary_residence)}</div>
+                </div>
+                <div class="detail-item">
+                    <label>Incident Category</label>
+                    <div class="val">${esc(lead.incident_category)}</div>
+                </div>
+                <div class="detail-item">
+                    <label>Audited Loss (USD)</label>
+                    <div class="val" style="font-weight:700;color:#B91C1C;">${esc(lead.audited_loss)}</div>
+                </div>
+                <div class="detail-item">
+                    <label>Transmitting Channel</label>
+                    <div class="val">${esc(lead.transmitting_channel)}</div>
+                </div>
+                <div class="detail-item">
+                    <label>Evidence / Ledger Status</label>
+                    <div class="val"><span class="badge ${lead.ledger_status === 'Preserved' ? 'badge-preserved' : 'badge-unpreserved'}">${esc(lead.ledger_status)}</span></div>
+                </div>
+                <div class="detail-item">
+                    <label>Digital Signature</label>
+                    <div class="val" style="font-style:italic;">"${esc(lead.digital_signature)}"</div>
+                </div>
+                <div class="detail-item full">
+                    <label>Event Chronology (Full Narrative)</label>
+                    <div class="val narrative">${esc(lead.event_chronology)}</div>
+                </div>
+                <div class="detail-item full">
+                    <label>User Agent</label>
+                    <div class="val" style="font-size:11px;color:#64748B;font-family:monospace;word-break:break-all;">${esc(lead.user_agent || '—')}</div>
+                </div>
+            </div>
+        `;
+        document.getElementById('detailModal').classList.add('open');
+    }
+
+    function closeModal() {
+        document.getElementById('detailModal').classList.remove('open');
+    }
+    document.getElementById('detailModal').addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+    });
+
+    // ==========================================
+    //  EXPORT CSV
+    // ==========================================
+    function exportCSV() {
+        const headers = ['ID', 'Date', 'Legal Name', 'WhatsApp', 'Gender', 'Age', 'State', 'Category', 'Loss Amount', 'Platform', 'Evidence', 'Signature', 'Chronology', 'IP Address', 'User Agent'];
+        const rows = filteredLeads.map(l => [
+            l.id,
+            formatDateFull(l.created_at),
+            l.legal_name,
+            l.whatsapp_terminal,
+            l.biological_gender,
+            l.verified_age,
+            l.primary_residence,
+            l.incident_category,
+            l.audited_loss,
+            l.transmitting_channel,
+            l.ledger_status,
+            l.digital_signature,
+            (l.event_chronology || '').replace(/\n/g, ' '),
+            l.ip_address,
+            l.user_agent
+        ].map(v => `"${String(v || '').replace(/"/g, '""')}"`));
+
+        const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+        const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `us-leads-${new Date().toISOString().slice(0, 10)}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    // ==========================================
+    //  UTILS
+    // ==========================================
+    function esc(str) {
+        if (!str) return '';
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function formatDate(iso) {
+        if (!iso) return '—';
+        const d = new Date(iso);
+        return d.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: '2-digit' }) +
+               ' ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+    }
+
+    function formatDateFull(iso) {
+        if (!iso) return '—';
+        const d = new Date(iso);
+        return d.toLocaleString('en-US', {
+            year: 'numeric', month: 'short', day: '2-digit',
+            hour: '2-digit', minute: '2-digit', second: '2-digit',
+            hour12: false, timeZoneName: 'short'
+        });
+    }
+</script>
+</body>
+</html>
